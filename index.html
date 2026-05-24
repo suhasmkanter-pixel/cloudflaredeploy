@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wheel of Names – Free Random Name Picker Spinner</title>
+
+<meta name="description" content="Spin the Wheel of Names online for free. Randomly pick names, winners, teams, students, giveaways, raffle entries, and more with a smooth animated spinning wheel.">
+
+<meta name="keywords" content="wheel of names, random name picker, spin wheel, lucky draw wheel, raffle picker, giveaway picker, spinner wheel, online wheel spinner, random selector">
+
+<meta name="author" content="Your Brand Name">
+
+<meta name="robots" content="index, follow">
+
+<meta name="theme-color" content="#0c0c0e">
+
+<link rel="canonical" href="https://yourdomain.com/">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Wheel of Names – Free Random Name Picker Spinner">
+<meta property="og:description" content="Free online wheel spinner for random name selection, giveaways, raffles, classrooms, and teams.">
+<meta property="og:url" content="https://yourdomain.com/">
+<meta property="og:image" content="https://yourdomain.com/preview.jpg">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Wheel of Names – Free Random Name Picker Spinner">
+<meta name="twitter:description" content="Spin a beautiful animated wheel to randomly choose names and winners online.">
+<meta name="twitter:image" content="https://yourdomain.com/preview.jpg">
+
+<!-- Performance -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Wheel of Names",
+  "url": "https://yourdomain.com/",
+  "applicationCategory": "GameApplication",
+  "operatingSystem": "Any",
+  "description": "A free online spinning wheel to randomly pick names, winners, raffle entries, teams, and giveaways.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0"
+  }
+}
+</script><style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0c0c0e;
+    --panel: #13131a;
+    --border: #1f1f2e;
+    --text: #e8e8f0;
+    --muted: #555570;
+    --accent: #f0c060;
+    --accent2: #a78bfa;
+    --danger: #f87171;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+  }
+
+  /* Subtle grid bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #app {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 24px;
+  }
+
+  /* ── LEFT: wheel ── */
+  #wheel-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    flex-shrink: 0;
+  }
+
+  #wheel-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    text-align: center;
+  }
+
+  #wheel-wrap {
+    position: relative;
+    width: 420px;
+    height: 420px;
+  }
+
+  #wheel-canvas {
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    display: block;
+    filter: drop-shadow(0 0 40px rgba(240,192,96,0.15));
+  }
+
+  /* Pointer */
+  #pointer {
+    position: absolute;
+    right: -18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 18px solid transparent;
+    border-bottom: 18px solid transparent;
+    border-right: 36px solid var(--accent);
+    filter: drop-shadow(0 0 8px rgba(240,192,96,0.6));
+    z-index: 10;
+  }
+
+  /* Center hub */
+  #hub {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 3px solid var(--border);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  #spin-btn {
+    background: var(--accent);
+    color: #0c0c0e;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 14px 48px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 32px rgba(240,192,96,0.25);
+  }
+
+  #spin-btn:hover { transform: scale(1.04); box-shadow: 0 0 40px rgba(240,192,96,0.4); }
+  #spin-btn:active { transform: scale(0.97); }
+  #spin-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* ── RIGHT: panel ── */
+  #panel {
+    width: 300px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 520px;
+  }
+
+  #panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  #panel-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  #count-badge {
+    font-size: 12px;
+    background: var(--border);
+    color: var(--muted);
+    padding: 3px 10px;
+    border-radius: 100px;
+  }
+
+  #input-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  #name-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  #name-input:focus { border-color: var(--accent); }
+  #name-input::placeholder { color: var(--muted); }
+
+  #add-btn {
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    color: #0c0c0e;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  #add-btn:hover { transform: scale(1.08); }
+
+  #names-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+    padding-right: 4px;
+  }
+
+  #names-list::-webkit-scrollbar { width: 4px; }
+  #names-list::-webkit-scrollbar-track { background: transparent; }
+  #names-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .name-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    animation: slideIn 0.15s ease;
+    transition: border-color 0.15s;
+  }
+
+  .name-item:hover { border-color: #2a2a40; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(8px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .name-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .name-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .remove-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: color 0.15s;
+    opacity: 0;
+  }
+
+  .name-item:hover .remove-btn { opacity: 1; }
+  .remove-btn:hover { color: var(--danger); }
+
+  #panel-footer {
+    display: flex;
+    gap: 8px;
+  }
+
+  .footer-btn {
+    flex: 1;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+
+  .footer-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Result overlay */
+  #result-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  #result-overlay.show { display: flex; }
+
+  #result-card {
+    background: var(--panel);
+    border: 1px solid var(--accent);
+    border-radius: 24px;
+    padding: 48px 64px;
+    text-align: center;
+    box-shadow: 0 0 80px rgba(240,192,96,0.2);
+    animation: popIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.7); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  #result-label {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  #result-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    color: var(--accent);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  #result-close {
+    background: var(--accent);
+    border: none;
+    color: #0c0c0e;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 12px 36px;
+    border-radius: 100px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.15s;
+  }
+
+  #result-close:hover { transform: scale(1.04); }
+
+  /* Confetti dots */
+  .confetti-piece {
+    position: fixed;
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 99;
+    animation: confettiFall linear forwards;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Empty state */
+  #empty-hint {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    padding: 20px 0;
+    line-height: 1.6;
+  }
+
+  /* Responsive */
+  @media (max-width: 780px) {
+    #app { flex-direction: column; gap: 20px; padding: 16px; overflow-y: auto; }
+    body { overflow-y: auto; }
+    #wheel-wrap { width: 300px; height: 300px; }
+    #wheel-canvas { width: 300px; height: 300px; }
+    #panel { width: 300px; max-height: 320px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div id="wheel-side">
+    <div id="wheel-title">Wheel of Names</div>
+    <div id="wheel-wrap">
+      <canvas id="wheel-canvas" width="840" height="840"></canvas>
+      <div id="pointer"></div>
+      <div id="hub">🎯</div>
+    </div>
+    <button id="spin-btn">Spin</button>
+  </div>
+
+  <div id="panel">
+    <div id="panel-header">
+      <span id="panel-title">Names</span>
+      <span id="count-badge">0</span>
+    </div>
+    <div id="input-row">
+      <input id="name-input" type="text" placeholder="Add a name…" maxlength="40" autocomplete="off">
+      <button id="add-btn">+</button>
+    </div>
+    <div id="names-list">
+      <div id="empty-hint">Add names above<br>then spin the wheel!</div>
+    </div>
+    <div id="panel-footer">
+      <button class="footer-btn" id="shuffle-btn">⇄ Shuffle</button>
+      <button class="footer-btn" id="clear-btn">✕ Clear all</button>
+    </div>
+  </div>
+</div>
+
+<div id="result-overlay">
+  <div id="result-card">
+    <div id="result-label">🎉 Winner!</div>
+    <div id="result-name"></div>
+  </div>
+  <button id="result-close">Continue</button>
+</div>
+
+<script>
+// ── Crypto-based random ──────────────────────────────────────
+function cryptoRandom() {
+  const buf = new Uint32Array(1);
+  crypto.getRandomValues(buf);
+  return buf[0] / (0xFFFFFFFF + 1);
+}
+
+function cryptoInt(min, max) {
+  return Math.floor(cryptoRandom() * (max - min + 1)) + min;
+}
+
+// ── State ────────────────────────────────────────────────────
+let names = ['Alice', 'Bob', 'Charlie', 'Diana', 'Ethan', 'Fiona'];
+let currentAngle = 0;
+let isSpinning = false;
+
+// Segment palette — rich, distinct colours
+const PALETTE = [
+  '#e85d75','#f0a050','#f0c060','#6dd4a8',
+  '#5bc4e8','#7b8cf8','#c47bdb','#e87b5d',
+  '#80d46d','#f06890','#50c8d0','#d4a06d',
+  '#8888ee','#e8c050','#60d888','#d06898'
+];
+
+function colorAt(i) {
+  return PALETTE[i % PALETTE.length];
+}
+
+// ── Canvas ───────────────────────────────────────────────────
+const canvas = document.getElementById('wheel-canvas');
+const ctx = canvas.getContext('2d');
+const CX = canvas.width / 2;
+const CY = canvas.height / 2;
+const R = CX - 10;
+
+function drawWheel(angle) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (names.length === 0) {
+    // Empty wheel
+    ctx.beginPath();
+    ctx.arc(CX, CY, R, 0, Math.PI * 2);
+    ctx.fillStyle = '#1a1a28';
+    ctx.fill();
+    ctx.strokeStyle = '#2a2a40';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.fillStyle = '#555570';
+    ctx.font = '500 28px DM Sans';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Add names →', CX, CY);
+    return;
+  }
+
+  const n = names.length;
+  const arc = (Math.PI * 2) / n;
+
+  for (let i = 0; i < n; i++) {
+    const startA = angle + i * arc;
+    const endA = startA + arc;
+    const midA = startA + arc / 2;
+
+    // Segment fill
+    ctx.beginPath();
+    ctx.moveTo(CX, CY);
+    ctx.arc(CX, CY, R, startA, endA);
+    ctx.closePath();
+    ctx.fillStyle = colorAt(i);
+    ctx.fill();
+
+    // Subtle darker border
+    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Label
+    ctx.save();
+    ctx.translate(CX, CY);
+    ctx.rotate(midA);
+
+    const textR = R * 0.62;
+    const maxW = R * 0.55;
+
+    ctx.fillStyle = 'rgba(0,0,0,0.55)';
+    ctx.font = `600 ${fontSize(n)}px DM Sans`;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+
+    let label = names[i];
+    // Truncate if too long
+    while (ctx.measureText(label).width > maxW && label.length > 2) {
+      label = label.slice(0, -2) + '…';
+    }
+
+    // Shadow text
+    ctx.fillText(label, textR + 1, 1);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(label, textR, 0);
+    ctx.restore();
+  }
+
+  // Outer ring
+  ctx.beginPath();
+  ctx.arc(CX, CY, R, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 4;
+  ctx.stroke();
+}
+
+function fontSize(n) {
+  if (n <= 4) return 32;
+  if (n <= 8) return 26;
+  if (n <= 12) return 22;
+  if (n <= 20) return 18;
+  return 14;
+}
+
+// ── Spin logic ───────────────────────────────────────────────
+function spin() {
+  if (isSpinning || names.length < 2) return;
+  isSpinning = true;
+  document.getElementById('spin-btn').disabled = true;
+
+  const n = names.length;
+  const arc = (Math.PI * 2) / n;
+
+  // Pick winner using crypto
+  const winnerIdx = cryptoInt(0, n - 1);
+
+  // We need the wheel to stop so the pointer (at right = 0 rad) points at winner
+  // Pointer is at angle 0 (right side). Segment i starts at: currentAngle + i*arc
+  // Mid of segment i: currentAngle + i*arc + arc/2
+  // We want mid of winner at 0 (or 2π) after spin
+  // Extra full rotations: 5–10 spins for drama
+  const extraSpins = cryptoInt(6, 10) * Math.PI * 2;
+  const targetMid = winnerIdx * arc + arc / 2;
+  // Target final angle: offset so winner mid lands at 0
+  const targetAngle = extraSpins - targetMid;
+
+  const startAngle = currentAngle;
+  const totalDelta = targetAngle - (startAngle % (Math.PI * 2));
+  const duration = 4000 + cryptoInt(0, 1200);
+  let startTime = null;
+
+  function easeOut(t) {
+    // Cubic ease out for smooth deceleration
+    return 1 - Math.pow(1 - t, 4);
+  }
+
+  function frame(ts) {
+    if (!startTime) startTime = ts;
+    const elapsed = ts - startTime;
+    const t = Math.min(elapsed / duration, 1);
+    const eased = easeOut(t);
+
+    currentAngle = startAngle + totalDelta * eased;
+    drawWheel(currentAngle);
+
+    if (t < 1) {
+      requestAnimationFrame(frame);
+    } else {
+      currentAngle = targetAngle % (Math.PI * 2);
+      isSpinning = false;
+      document.getElementById('spin-btn').disabled = false;
+      showResult(names[winnerIdx], colorAt(winnerIdx));
+    }
+  }
+
+  requestAnimationFrame(frame);
+}
+
+// ── Result overlay ───────────────────────────────────────────
+function showResult(name, color) {
+  document.getElementById('result-name').textContent = name;
+  document.getElementById('result-name').style.color = color;
+  document.getElementById('result-overlay').classList.add('show');
+  launchConfetti(color);
+}
+
+function hideResult() {
+  document.getElementById('result-overlay').classList.remove('show');
+}
+
+function launchConfetti(winColor) {
+  const colors = [winColor, '#f0c060', '#a78bfa', '#fff', '#f87171', '#60d888'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = cryptoRandom() * 100 + 'vw';
+    el.style.top = '-20px';
+    el.style.background = colors[cryptoInt(0, colors.length - 1)];
+    el.style.width = cryptoInt(6, 12) + 'px';
+    el.style.height = cryptoInt(6, 14) + 'px';
+    el.style.borderRadius = cryptoRandom() > 0.5 ? '50%' : '2px';
+    const dur = cryptoInt(1800, 3200);
+    el.style.animationDuration = dur + 'ms';
+    el.style.animationDelay = cryptoInt(0, 600) + 'ms';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), dur + 800);
+  }
+}
+
+// ── Names list UI ────────────────────────────────────────────
+function renderList() {
+  const list = document.getElementById('names-list');
+  const badge = document.getElementById('count-badge');
+  badge.textContent = names.length;
+
+  if (names.length === 0) {
+    list.innerHTML = '<div id="empty-hint">Add names above<br>then spin the wheel!</div>';
+    return;
+  }
+
+  list.innerHTML = '';
+  names.forEach((name, i) => {
+    const item = document.createElement('div');
+    item.className = 'name-item';
+    item.innerHTML = `
+      <div class="name-dot" style="background:${colorAt(i)}"></div>
+      <span class="name-text">${escHtml(name)}</span>
+      <button class="remove-btn" data-i="${i}" title="Remove">×</button>
+    `;
+    list.appendChild(item);
+  });
+
+  list.querySelectorAll('.remove-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      names.splice(parseInt(btn.dataset.i), 1);
+      renderAll();
+    });
+  });
+}
+
+function renderAll() {
+  renderList();
+  drawWheel(currentAngle);
+  document.getElementById('spin-btn').disabled = names.length < 2;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Add name ─────────────────────────────────────────────────
+function addName() {
+  const input = document.getElementById('name-input');
+  const val = input.value.trim();
+  if (!val) return;
+  names.push(val);
+  input.value = '';
+  input.focus();
+  renderAll();
+}
+
+document.getElementById('add-btn').addEventListener('click', addName);
+document.getElementById('name-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') addName();
+});
+
+// ── Spin button ───────────────────────────────────────────────
+document.getElementById('spin-btn').addEventListener('click', spin);
+
+// ── Footer controls ──────────────────────────────────────────
+document.getElementById('clear-btn').addEventListener('click', () => {
+  if (names.length === 0) return;
+  if (confirm('Clear all names?')) { names = []; renderAll(); }
+});
+
+document.getElementById('shuffle-btn').addEventListener('click', () => {
+  // Fisher-Yates with crypto random
+  for (let i = names.length - 1; i > 0; i--) {
+    const j = cryptoInt(0, i);
+    [names[i], names[j]] = [names[j], names[i]];
+  }
+  renderAll();
+});
+
+// ── Result close ─────────────────────────────────────────────
+document.getElementById('result-close').addEventListener('click', hideResult);
+document.getElementById('result-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('result-overlay')) hideResult();
+});
+
+// ── Init ─────────────────────────────────────────────────────
+renderAll();
+</script>
+</body>
+</html>
