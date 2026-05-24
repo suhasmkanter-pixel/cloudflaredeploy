@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cloudflaredeploy.deploycloud.workers.dev/sitemap.xml
